@@ -1,0 +1,228 @@
+{
+  "medicamente": [
+    {
+      "id": 1,
+      "name": "Paracetamol 500mg",
+      "dci": "Paracetamol",
+      "categorie": "Analgezice",
+      "stoc": 4,
+      "stoc_minim": 20,
+      "data_expirare": "2026-09-10",
+      "pret": 34.85,
+      "producator": "Terapia",
+      "lot": "LOT001"
+    },
+    {
+      "id": 2,
+      "name": "Nurofen 200mg",
+      "dci": "Ibuprofen",
+      "categorie": "Analgezice",
+      "stoc": 12,
+      "stoc_minim": 15,
+      "data_expirare": "2025-05-15",
+      "pret": 62.32,
+      "producator": "Reckitt",
+      "lot": "LOT002"
+    },
+    {
+      "id": 3,
+      "name": "Augmentin 875mg",
+      "dci": "Amoxicilina+Clavulanat",
+      "categorie": "Antibiotice",
+      "stoc": 8,
+      "stoc_minim": 10,
+      "data_expirare": "2025-06-02",
+      "pret": 172.2,
+      "producator": "GSK",
+      "lot": "LOT003"
+    },
+    {
+      "id": 4,
+      "name": "Amoxicilina 500mg",
+      "dci": "Amoxicilina",
+      "categorie": "Antibiotice",
+      "stoc": 11,
+      "stoc_minim": 15,
+      "data_expirare": "2026-11-20",
+      "pret": 73.8,
+      "producator": "Antibiotice SA",
+      "lot": "LOT004"
+    },
+    {
+      "id": 5,
+      "name": "Diclofenac 50mg",
+      "dci": "Diclofenac sodium",
+      "categorie": "Antiinflamatoare",
+      "stoc": 34,
+      "stoc_minim": 10,
+      "data_expirare": "2027-03-18",
+      "pret": 40.18,
+      "producator": "Terapia",
+      "lot": "LOT005"
+    },
+    {
+      "id": 6,
+      "name": "Vitamina C 1000mg",
+      "dci": "Acid ascorbic",
+      "categorie": "Vitamine",
+      "stoc": 60,
+      "stoc_minim": 20,
+      "data_expirare": "2026-12-01",
+      "pret": 92.25,
+      "producator": "Bayer",
+      "lot": "LOT006"
+    },
+    {
+      "id": 7,
+      "name": "Metformin 850mg",
+      "dci": "Metformin HCl",
+      "categorie": "Cardiologie",
+      "stoc": 22,
+      "stoc_minim": 15,
+      "data_expirare": "2025-07-18",
+      "pret": 49.2,
+      "producator": "Merck",
+      "lot": "LOT007"
+    },
+    {
+      "id": 8,
+      "name": "Aspirina 100mg",
+      "dci": "Acid acetilsalicilic",
+      "categorie": "Analgezice",
+      "stoc": 6,
+      "stoc_minim": 15,
+      "data_expirare": "2027-01-05",
+      "pret": 22.55,
+      "producator": "Bayer",
+      "lot": "LOT008"
+    },
+    {
+      "id": 9,
+      "name": "Lisinopril 10mg",
+      "dci": "Lisinopril",
+      "categorie": "Cardiologie",
+      "stoc": 9,
+      "stoc_minim": 20,
+      "data_expirare": "2026-08-22",
+      "pret": 77.9,
+      "producator": "Zentiva",
+      "lot": "LOT009"
+    },
+    {
+      "id": 10,
+      "name": "Omeprazol 20mg",
+      "dci": "Omeprazol",
+      "categorie": "Antiinflamatoare",
+      "stoc": 45,
+      "stoc_minim": 10,
+      "data_expirare": "2026-10-30",
+      "pret": 59.45,
+      "producator": "Sandoz",
+      "lot": "LOT010"
+    },
+    {
+      "id": 11,
+      "name": "Atorvastatin 20mg",
+      "dci": "Atorvastatin",
+      "categorie": "Cardiologie",
+      "stoc": 28,
+      "stoc_minim": 10,
+      "data_expirare": "2027-02-14",
+      "pret": 35,
+      "producator": "Pfizer",
+      "lot": "LOT011"
+    },
+    {
+      "id": 12,
+      "name": "Zinc 15mg",
+      "dci": "Zinc sulfat",
+      "categorie": "Vitamine",
+      "stoc": 55,
+      "stoc_minim": 10,
+      "data_expirare": "2027-06-01",
+      "pret": 16,
+      "producator": "Biofarm",
+      "lot": "LOT012"
+    }
+  ],
+  "miscari": [
+    {
+      "id": 1,
+      "tip": "intrare",
+      "medicament_id": 6,
+      "medicament_name": "Vitamina C 1000mg",
+      "cantitate": 50,
+      "user": "admin",
+      "data": "2026-04-07T09:12:00",
+      "note": "Comandă furnizor"
+    },
+    {
+      "id": 2,
+      "tip": "iesire",
+      "medicament_id": 1,
+      "medicament_name": "Paracetamol 500mg",
+      "cantitate": 10,
+      "user": "guest",
+      "data": "2026-04-06T14:45:00",
+      "note": "Vânzare"
+    },
+    {
+      "id": 3,
+      "tip": "intrare",
+      "medicament_id": 5,
+      "medicament_name": "Diclofenac 50mg",
+      "cantitate": 20,
+      "user": "admin",
+      "data": "2026-04-05T11:30:00",
+      "note": "Reaprovizionare"
+    },
+    {
+      "id": 4,
+      "tip": "iesire",
+      "medicament_id": 3,
+      "medicament_name": "Augmentin 875mg",
+      "cantitate": 5,
+      "user": "guest",
+      "data": "2026-04-04T16:00:00",
+      "note": "Vânzare"
+    },
+    {
+      "id": 5,
+      "tip": "iesire",
+      "medicament_id": 7,
+      "medicament_name": "Metformin 850mg",
+      "cantitate": 8,
+      "user": "guest",
+      "data": "2026-04-03T10:20:00",
+      "note": "Vânzare"
+    }
+  ],
+  "comenzi": [
+    {
+      "id": 1,
+      "nume": "Alexandru Cucobco",
+      "telefon": "060674410",
+      "adresa": "secretul statului",
+      "items": [
+        {
+          "medicament_id": 1,
+          "medicament_name": "Paracetamol 500mg",
+          "cantitate": 1,
+          "pret": 8.5
+        },
+        {
+          "medicament_id": 8,
+          "medicament_name": "Aspirina 100mg",
+          "cantitate": 2,
+          "pret": 5.5
+        }
+      ],
+      "total": 19.5,
+      "status": "respinsa",
+      "data": "2026-04-08T15:46:59.036Z"
+    }
+  ],
+  "next_id_med": 13,
+  "next_id_miscare": 6,
+  "next_id_comanda": 2
+}
