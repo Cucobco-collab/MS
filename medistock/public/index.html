@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="MediStock Pro — Sistem de management farmaceutic, ASEM Moldova"/>
+<title>MediStock Pro — Farmacie ASEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── UI/UX Pro Max · Trust & Authority · Medical Clinic ── */
+:root{
+  --primary:#0891B2;--primary-dark:#0e7490;--primary-light:#22D3EE;--primary-ultra:#ECFEFF;
+  --cta:#059669;--cta-dark:#047857;--cta-light:#D1FAE5;
+  --bg:#F8FFFE;--bg2:#F0FDFA;--bg3:#ECFEFF;
+  --sidebar-bg:#0e7490;--sidebar-bg2:#0891B2;
+  --white:#FFFFFF;
+  --text:#134E4A;--text-med:#1E6B65;--text-muted:#4B7A76;--text-dim:#6B9E9A;
+  --border:#CBD5E1;--border-light:#E2F5F3;
+  --danger:#DC2626;--danger-light:#FEF2F2;--danger-border:#FECACA;
+  --warning:#D97706;--warning-light:#FFFBEB;--warning-border:#FDE68A;
+  --success:#059669;--success-light:#ECFDF5;--success-border:#A7F3D0;
+  --info:#0891B2;--info-light:#ECFEFF;--info-border:#A5F3FC;
+  --gold:#B45309;--gold-light:#FFFBEB;
+  --radius:12px;--radius-sm:8px;--radius-lg:18px;--radius-xl:24px;
+  --shadow:0 1px 8px rgba(8,145,178,.10);
+  --shadow-md:0 4px 20px rgba(8,145,178,.12);
+  --shadow-lg:0 8px 40px rgba(8,145,178,.16);
+  --transition:.2s cubic-bezier(.4,0,.2,1);
+  --sidebar-w:264px;
+  --font-head:'Lexend',sans-serif;--font-body:'Source Sans 3',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:4px}
+
+/* ── TOAST ── */
+#toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--cta);border-radius:var(--radius-sm);padding:13px 16px;min-width:280px;max-width:380px;font-size:.875rem;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);animation:slideIn .28s ease forwards;pointer-events:all;color:var(--text)}
+.toast.error{border-left-color:var(--danger)}
+.toast.warn{border-left-color:var(--warning)}
+@keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{to{transform:translateX(110%);opacity:0}}
+
+/* ── LOGIN ── */
+#login-page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0e7490 0%,#0891B2 45%,#0d9488 100%);z-index:100;padding:20px}
+#login-page::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.login-card{background:var(--white);border-radius:var(--radius-xl);padding:44px 40px;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(0,0,0,.2);position:relative}
+.login-header{text-align:center;margin-bottom:32px}
+.login-logo-wrap{width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;box-shadow:0 8px 24px rgba(8,145,178,.3)}
+.login-title{font-family:var(--font-head);font-size:1.7rem;font-weight:800;color:var(--text);letter-spacing:-.5px}
+.login-sub{font-size:.875rem;color:var(--text-muted);margin-top:4px}
+.trust-badges{display:flex;justify-content:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.trust-badge{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border-light);border-radius:20px;padding:5px 12px;font-size:.72rem;font-weight:600;color:var(--text-med)}
+.login-form label{display:block;font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.login-form .field{margin-bottom:16px}
+.login-form input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text);font-size:.95rem;font-family:var(--font-body);transition:var(--transition);outline:none}
+.login-form input:focus{border-color:var(--primary);background:var(--white);box-shadow:0 0 0 3px rgba(8,145,178,.12)}
+.login-form input::placeholder{color:var(--text-dim)}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:var(--radius-sm);padding:13px;color:#fff;font-size:1rem;font-weight:700;font-family:var(--font-head);cursor:pointer;transition:var(--transition);box-shadow:0 4px 16px rgba(8,145,178,.3);margin-top:4px}
+.btn-login:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(8,145,178,.4)}
+.quick-access{margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.quick-access p{font-size:.78rem;color:var(--text-muted);text-align:center;margin-bottom:10px;font-weight:600}
+.quick-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quick-btn{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;cursor:pointer;transition:var(--transition);font-size:.83rem;color:var(--text-med);font-weight:600}
+.quick-btn:hover{background:var(--primary-ultra);border-color:var(--primary-light);color:var(--primary-dark)}
+.login-footer{text-align:center;margin-top:22px;font-size:.73rem;color:var(--text-dim);line-height:1.6}
+
+/* ── APP LAYOUT ── */
+#app{display:none;height:100vh;overflow:hidden}
+#app.visible{display:flex}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;position:relative;z-index:50;transition:transform var(--transition);box-shadow:2px 0 16px rgba(14,116,144,.15)}
+.sidebar-header{padding:22px 18px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.sidebar-logo{display:flex;align-items:center;gap:12px}
+.logo-pill{width:42px;height:42px;background:rgba(255,255,255,.18);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid rgba(255,255,255,.2)}
+.logo-text{font-family:var(--font-head);font-weight:800;font-size:1.05rem;color:#fff;line-height:1.1}
+.logo-sub{font-size:.68rem;color:rgba(255,255,255,.65);margin-top:1px}
+.user-pill{margin:12px 12px 0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);padding:10px 12px;display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;color:#fff}
+.user-avatar.admin{background:linear-gradient(135deg,#7C3AED,#A78BFA)}
+.user-avatar.guest{background:linear-gradient(135deg,#059669,#34D399)}
+.user-name{font-size:.83rem;font-weight:700;color:#fff;line-height:1.2}
+.user-role{font-size:.67rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px}
+.sidebar-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.nav-section-label{font-size:.63rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;padding:10px 10px 5px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);font-size:.875rem;font-weight:500;color:rgba(255,255,255,.75);border:1px solid transparent;position:relative}
+.nav-item:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.2);font-weight:600}
+.nav-item .nav-icon{font-size:17px;width:22px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;border-radius:10px;padding:2px 7px;font-size:.63rem;font-weight:800}
+.nav-badge.warn{background:var(--warning)}
+.sidebar-footer{padding:14px 10px;border-top:1px solid rgba(255,255,255,.12)}
+.btn-logout{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);padding:10px;color:rgba(255,255,255,.8);font-size:.83rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-logout:hover{background:rgba(220,38,38,.2);border-color:rgba(220,38,38,.3);color:#fff}
+.sidebar-credits{padding:8px 10px 0;font-size:.63rem;color:rgba(255,255,255,.35);text-align:center;line-height:1.6}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.topbar{background:var(--white);border-bottom:1px solid var(--border-light);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:40;box-shadow:0 1px 4px rgba(8,145,178,.06)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:6px;border-radius:8px}
+.hamburger:hover{background:var(--bg2)}
+.topbar-title{font-family:var(--font-head);font-size:1.05rem;font-weight:700;color:var(--text)}
+.topbar-subtitle{font-size:.75rem;color:var(--text-muted)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-date{font-size:.75rem;color:var(--text-dim);background:var(--bg2);padding:5px 10px;border-radius:20px;border:1px solid var(--border-light)}
+.topbar-btn{background:none;border:1.5px solid var(--border);color:var(--text-muted);font-size:18px;cursor:pointer;padding:7px 10px;border-radius:var(--radius-sm);transition:var(--transition);position:relative;display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;font-family:var(--font-body)}
+.topbar-btn:hover{background:var(--bg2);border-color:var(--primary-light);color:var(--primary)}
+.topbar-btn .dot{position:absolute;top:3px;right:3px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--white)}
+
+/* ── PAGES ── */
+.page{display:none;padding:28px;animation:fadeUp .25s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.page-title{font-family:var(--font-head);font-size:1.55rem;font-weight:800;letter-spacing:-.4px;color:var(--text)}
+.page-subtitle{font-size:.84rem;color:var(--text-muted);margin-top:3px}
+.page-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:var(--radius-sm);font-size:.875rem;font-weight:600;font-family:var(--font-body);cursor:pointer;transition:var(--transition);border:1.5px solid transparent;white-space:nowrap}
+.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(8,145,178,.25)}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(8,145,178,.35)}
+.btn-cta{background:var(--cta);color:#fff;border-color:var(--cta);box-shadow:0 2px 8px rgba(5,150,105,.2)}
+.btn-cta:hover{background:var(--cta-dark);transform:translateY(-1px)}
+.btn-secondary{background:var(--white);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover{background:var(--bg2);border-color:var(--primary-light);color:var(--primary)}
+.btn-danger{background:var(--danger-light);color:var(--danger);border-color:var(--danger-border)}
+.btn-danger:hover{background:#FEE2E2}
+.btn-success{background:var(--success-light);color:var(--cta);border-color:var(--success-border)}
+.btn-success:hover{background:#D1FAE5}
+.btn-warning{background:var(--warning-light);color:var(--warning);border-color:var(--warning-border)}
+.btn-sm{padding:6px 12px;font-size:.8rem}
+.btn-icon{width:34px;height:34px;padding:0;justify-content:center}
+
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.stat-card{background:var(--white);border:1.5px solid var(--border-light);border-radius:var(--radius);padding:20px;display:flex;align-items:flex-start;gap:14px;transition:var(--transition);box-shadow:var(--shadow)}
+.stat-card:hover{border-color:var(--primary-light);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.stat-icon.teal{background:var(--info-light)}
+.stat-icon.green{background:var(--success-light)}
+.stat-icon.red{background:var(--danger-light)}
+.stat-icon.yellow{background:var(--warning-light)}
+.stat-icon.purple{background:#F5F3FF}
+.stat-value{font-family:var(--font-head);font-size:1.9rem;font-weight:800;line-height:1;color:var(--text)}
+.stat-label{font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.stat-info{flex:1}
+
+/* ── TRUST BANNER ── */
+.trust-bar{background:linear-gradient(135deg,var(--primary),#0e7490);border-radius:var(--radius);padding:18px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px;box-shadow:var(--shadow-md)}
+.trust-bar-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:#fff;flex:1;min-width:140px}
+.trust-items{display:flex;gap:12px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 13px;font-size:.75rem;color:#fff;font-weight:600;white-space:nowrap}
+
+/* ── CARD ── */
+.card{background:var(--white);border:1.5px solid var(--border-light);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg)}
+.card-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--text)}
+.card-body{padding:20px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+
+/* ── SEARCH ── */
+.search-bar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.search-input-wrap{position:relative;flex:1;min-width:200px}
+.search-input-wrap input{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px 10px 38px;color:var(--text);font-size:.875rem;transition:var(--transition);outline:none;font-family:var(--font-body)}
+.search-input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(8,145,178,.1)}
+.search-input-wrap::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px}
+select.filter-select{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-size:.875rem;cursor:pointer;outline:none;transition:var(--transition);font-family:var(--font-body)}
+select.filter-select:focus{border-color:var(--primary)}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+thead th{background:var(--bg2);padding:11px 16px;text-align:left;font-size:.71rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;border-bottom:1.5px solid var(--border-light);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border-light);transition:background var(--transition)}
+tbody tr:hover{background:var(--bg2)}
+tbody td{padding:13px 16px;vertical-align:middle;color:var(--text)}
+tbody tr:last-child{border-bottom:none}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.2px}
+.badge-ok{background:var(--success-light);color:var(--cta);border:1px solid var(--success-border)}
+.badge-expira{background:var(--warning-light);color:var(--warning);border:1px solid var(--warning-border)}
+.badge-expirat{background:var(--danger-light);color:var(--danger);border:1px solid var(--danger-border)}
+.badge-epuizat{background:var(--danger-light);color:var(--danger);border:1px solid var(--danger-border)}
+.badge-stoc_redus{background:var(--warning-light);color:var(--warning);border:1px solid var(--warning-border)}
+.badge-in_asteptare{background:var(--info-light);color:var(--info);border:1px solid var(--info-border)}
+.badge-aprobata{background:var(--success-light);color:var(--cta);border:1px solid var(--success-border)}
+.badge-respinsa{background:var(--danger-light);color:var(--danger);border:1px solid var(--danger-border)}
+.badge-livrata{background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,40,50,.5);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity var(--transition)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border:1.5px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);transform:scale(.96) translateY(12px);transition:transform var(--transition)}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
+.modal-title{font-family:var(--font-head);font-size:1.05rem;font-weight:700;color:var(--text)}
+.modal-close{background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;padding:4px;line-height:1;transition:color var(--transition);border-radius:6px}
+.modal-close:hover{color:var(--danger);background:var(--danger-light)}
+.modal-body{padding:20px 24px}
+.modal-footer{padding:16px 24px 20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end;gap:8px;background:var(--bg)}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:.76rem;font-weight:700;color:var(--text);letter-spacing:.3px;text-transform:uppercase}
+.form-input{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 13px;color:var(--text);font-size:.9rem;font-family:var(--font-body);transition:var(--transition);outline:none;width:100%}
+.form-input:focus{border-color:var(--primary);background:var(--white);box-shadow:0 0 0 3px rgba(8,145,178,.1)}
+select.form-input{cursor:pointer}
+textarea.form-input{resize:vertical;min-height:76px}
+
+/* ── CART ── */
+.cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:360px;background:var(--white);border-left:1.5px solid var(--border-light);z-index:200;transform:translateX(100%);transition:transform var(--transition);display:flex;flex-direction:column;box-shadow:-4px 0 32px rgba(8,145,178,.12)}
+.cart-sidebar.open{transform:translateX(0)}
+.cart-header{padding:18px 20px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
+.cart-title{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.cart-count{background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800}
+.cart-items{flex:1;overflow-y:auto;padding:14px}
+.cart-item{background:var(--bg2);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:.84rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-price{font-size:.75rem;color:var(--text-muted)}
+.cart-item-qty{display:flex;align-items:center;gap:6px}
+.qty-btn{width:26px;height:26px;background:var(--white);border:1.5px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition);font-weight:700}
+.qty-btn:hover{background:var(--primary);border-color:var(--primary);color:#fff}
+.qty-val{font-size:.85rem;font-weight:700;min-width:22px;text-align:center;color:var(--text)}
+.cart-footer{padding:16px 20px;border-top:1px solid var(--border-light);background:var(--bg)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cart-total-label{font-size:.84rem;color:var(--text-muted);font-weight:600}
+.cart-total-val{font-family:var(--font-head);font-size:1.3rem;font-weight:800;color:var(--primary)}
+.cart-empty{text-align:center;padding:40px 20px;color:var(--text-dim)}
+.cart-empty-icon{font-size:44px;margin-bottom:10px}
+
+/* ── CHATBOT ── */
+.chat-fab{position:fixed;bottom:26px;right:26px;width:56px;height:56px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 20px rgba(8,145,178,.35);transition:var(--transition);z-index:300;color:#fff}
+.chat-fab:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(8,145,178,.45)}
+.chat-fab .notif{position:absolute;top:2px;right:2px;width:14px;height:14px;background:var(--danger);border-radius:50%;border:2px solid var(--white);display:none}
+.chat-window{position:fixed;bottom:92px;right:26px;width:350px;max-height:500px;background:var(--white);border:1.5px solid var(--border-light);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;z-index:300;transform:scale(.9) translateY(18px);opacity:0;pointer-events:none;transition:all .28s cubic-bezier(.4,0,.2,1);transform-origin:bottom right}
+.chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-win-header{padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:11px;background:linear-gradient(135deg,var(--primary),#0e7490);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.chat-avatar{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border:2px solid rgba(255,255,255,.3)}
+.chat-bot-name{font-weight:700;font-size:.88rem;color:#fff}
+.chat-bot-status{font-size:.7rem;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:4px}
+.chat-bot-status::before{content:'';width:6px;height:6px;background:#4ADE80;border-radius:50%;display:inline-block}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:180px;max-height:270px;background:var(--bg)}
+.chat-msg{max-width:84%;padding:9px 12px;border-radius:14px;font-size:.84rem;line-height:1.5;word-break:break-word}
+.chat-msg.bot{background:var(--white);border:1px solid var(--border-light);border-bottom-left-radius:3px;align-self:flex-start;color:var(--text);box-shadow:var(--shadow)}
+.chat-msg.user{background:var(--primary);color:#fff;border-bottom-right-radius:3px;align-self:flex-end}
+.chat-input-area{padding:10px 12px;border-top:1px solid var(--border-light);display:flex;gap:7px;background:var(--white);border-radius:0 0 var(--radius-lg) var(--radius-lg)}
+.chat-input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:8px 12px;color:var(--text);font-size:.84rem;font-family:var(--font-body);outline:none;transition:border-color var(--transition)}
+.chat-input:focus{border-color:var(--primary)}
+.chat-send{width:34px;height:34px;background:var(--primary);border:none;border-radius:8px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:var(--transition);flex-shrink:0}
+.chat-send:hover{background:var(--primary-dark)}
+
+/* ── ALERTS ── */
+.alert-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border-light);transition:background var(--transition)}
+.alert-item:last-child{border-bottom:none}
+.alert-item:hover{background:var(--bg2)}
+.alert-dot2{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.alert-dot2.red{background:var(--danger)}
+.alert-dot2.yellow{background:var(--warning)}
+.alert-name{font-size:.875rem;font-weight:600;color:var(--text)}
+.alert-detail{font-size:.74rem;color:var(--text-muted)}
+.alert-info{flex:1;min-width:0}
+.empty-state{text-align:center;padding:44px 20px;color:var(--text-dim)}
+.empty-state .empty-icon{font-size:44px;margin-bottom:10px;opacity:.4}
+.empty-state p{font-size:.875rem}
+
+/* ── MAP ── */
+.map-frame{width:100%;height:280px;border:0;display:block;border-radius:var(--radius-sm)}
+
+/* ── MOBILE OVERLAY ── */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:49}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  :root{--sidebar-w:272px}
+  .sidebar{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%);z-index:50}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:flex}
+  .page{padding:16px}
+  .topbar{padding:11px 16px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .two-col{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .chat-window{right:10px;left:10px;width:auto}
+  .chat-fab{bottom:18px;right:18px}
+  .cart-sidebar{width:100%;max-width:380px}
+  .topbar-date{display:none}
+  .page-header{flex-direction:column;align-items:flex-start}
+  .trust-bar{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
+  .login-card{padding:28px 20px}
+  table{font-size:.8rem}
+  thead th,tbody td{padding:9px 11px}
+}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo-wrap">💊</div>
+      <div class="login-title">MediStock Pro</div>
+      <div class="login-sub">Sistem de Management Farmaceutic</div>
+    </div>
+    <div class="trust-badges">
+      <span class="trust-badge">🏥 Farmacie ASEM</span>
+      <span class="trust-badge">🔒 Securizat</span>
+      <span class="trust-badge">✅ WCAG AAA</span>
+    </div>
+    <form class="login-form" id="login-form">
+      <div class="field">
+        <label>Utilizator</label>
+        <input type="text" id="inp-user" placeholder="admin sau guest" autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label>Parolă <span style="color:var(--text-dim);font-weight:400;text-transform:none;font-size:.75rem">(opțional pentru guest)</span></label>
+        <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="btn-login">🔐 Intră în Sistem</button>
+    </form>
+    <div class="quick-access">
+      <p>Acces rapid demonstrativ</p>
+      <div class="quick-btns">
+        <div class="quick-btn" onclick="quickLogin('admin')">🛡️ Administrator</div>
+        <div class="quick-btn" onclick="quickLogin('guest')">👤 Vizitator</div>
+      </div>
+    </div>
+    <div class="login-footer">
+      Creat de <strong>Cucobco Alexandru</strong> · Grupa TI-241<br/>
+      ASEM Moldova · Chișinău 2026
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-pill">💊</div>
+        <div><div class="logo-text">MediStock Pro</div><div class="logo-sub">Farmacie ASEM</div></div>
+      </div>
+      <div class="user-pill" id="user-pill">
+        <div class="user-avatar" id="user-avatar"></div>
+        <div><div class="user-name" id="user-name-display"></div><div class="user-role" id="user-role-display"></div></div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="logout()">🚪 Deconectare</button>
+      <div class="sidebar-credits">Cucobco Alexandru · TI-241<br/>ASEM Moldova 2026</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Meniu">☰</button>
+        <div><div class="topbar-title" id="topbar-title">Dashboard</div><div class="topbar-subtitle" id="topbar-subtitle">Bine ai venit!</div></div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+        <button class="topbar-btn" id="alert-btn" onclick="navigate('alerte')" style="display:none" aria-label="Alerte">
+          🔔 <span id="alert-count-top"></span><span class="dot" id="alert-dot" style="display:none"></span>
+        </button>
+        <button class="topbar-btn" onclick="toggleCart()" id="cart-btn" style="display:none" aria-label="Coș cumpărături">
+          🛒 Coș<span class="dot" style="display:none" id="cart-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page active" id="page-dashboard"></div>
+    <div class="page" id="page-medicamente"></div>
+    <div class="page" id="page-comenzi"></div>
+    <div class="page" id="page-miscari"></div>
+    <div class="page" id="page-alerte"></div>
+    <div class="page" id="page-rapoarte"></div>
+    <div class="page" id="page-locatie"></div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <div class="cart-title">🛒 Coș <span class="cart-count" id="cart-count">0</span></div>
+    <button class="modal-close" onclick="toggleCart()">×</button>
+  </div>
+  <div class="cart-items" id="cart-items-list"></div>
+  <div class="cart-footer" id="cart-footer"></div>
+</div>
+
+<!-- MODAL MEDICAMENT -->
+<div class="modal-overlay" id="modal-med">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="modal-med-title">Adaugă Medicament</div><button class="modal-close" onclick="closeModal('modal-med')">×</button></div>
+    <div class="modal-body">
+      <form id="form-med">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Denumire *</label><input class="form-input" name="name" required placeholder="Paracetamol 500mg"/></div>
+          <div class="form-group"><label class="form-label">DCI</label><input class="form-input" name="dci" placeholder="Paracetamol"/></div>
+          <div class="form-group"><label class="form-label">Categorie *</label>
+            <select class="form-input" name="categorie" required>
+              <option value="">Selectează...</option>
+              <option>Analgezice</option><option>Antibiotice</option><option>Antiinflamatoare</option>
+              <option>Vitamine</option><option>Cardiologie</option><option>Dermatologie</option>
+              <option>Gastroenterologie</option><option>Neurologie</option><option>Alte</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Producător</label><input class="form-input" name="producator" placeholder="Bayer"/></div>
+          <div class="form-group"><label class="form-label">Lot</label><input class="form-input" name="lot" placeholder="LOT001"/></div>
+          <div class="form-group"><label class="form-label">Preț (MDL) *</label><input class="form-input" type="number" name="pret" min="0" step="0.01" required placeholder="0.00"/></div>
+          <div class="form-group"><label class="form-label">Stoc *</label><input class="form-input" type="number" name="stoc" min="0" required placeholder="0"/></div>
+          <div class="form-group"><label class="form-label">Stoc Minim</label><input class="form-input" type="number" name="stoc_minim" min="0" placeholder="10"/></div>
+          <div class="form-group"><label class="form-label">Dată Expirare *</label><input class="form-input" type="date" name="data_expirare" required/></div>
+          <div class="form-group full"><label class="form-label">Descriere</label><textarea class="form-input" name="descriere" placeholder="Indicații, contraindicații..."></textarea></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-med')">Anulează</button><button class="btn btn-primary" onclick="saveMed()">💾 Salvează</button></div>
+  </div>
+</div>
+
+<!-- MODAL MISCARE -->
+<div class="modal-overlay" id="modal-miscare">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Înregistrează Mișcare Stoc</div><button class="modal-close" onclick="closeModal('modal-miscare')">×</button></div>
+    <div class="modal-body">
+      <form id="form-miscare">
+        <div class="form-grid">
+          <div class="form-group full"><label class="form-label">Medicament *</label><select class="form-input" name="medicament_id" id="select-med-miscare" required></select></div>
+          <div class="form-group"><label class="form-label">Tip *</label>
+            <select class="form-input" name="tip" required>
+              <option value="intrare">📥 Intrare (aprovizionare)</option>
+              <option value="iesire">📤 Ieșire (vânzare)</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Cantitate *</label><input class="form-input" type="number" name="cantitate" min="1" required placeholder="1"/></div>
+          <div class="form-group full"><label class="form-label">Notă</label><input class="form-input" name="note" placeholder="Motivul mișcării..."/></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-miscare')">Anulează</button><button class="btn btn-primary" onclick="saveMiscare()">✅ Confirmă</button></div>
+  </div>
+</div>
+
+<!-- MODAL COMANDA -->
+<div class="modal-overlay" id="modal-comanda">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">📦 Finalizează Comanda</div><button class="modal-close" onclick="closeModal('modal-comanda')">×</button></div>
+    <div class="modal-body">
+      <div id="modal-comanda-items" style="margin-bottom:16px;background:var(--bg2);border:1px solid var(--border-light);border-radius:8px;padding:12px;font-size:.84rem"></div>
+      <form id="form-comanda">
+        <div class="form-grid">
+          <div class="form-group full"><label class="form-label">Nume Complet *</label><input class="form-input" name="nume" required placeholder="Ion Popescu"/></div>
+          <div class="form-group"><label class="form-label">Telefon *</label><input class="form-input" name="telefon" required placeholder="+373 XX XXX XXX"/></div>
+          <div class="form-group"><label class="form-label">Adresă Livrare *</label><input class="form-input" name="adresa" required placeholder="Str. Exemplu 1, Chișinău"/></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-comanda')">Anulează</button><button class="btn btn-cta" onclick="placeOrder()">🚀 Plasează Comanda</button></div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<button class="chat-fab" id="chat-fab" onclick="toggleChat()" style="display:none" aria-label="Asistent Medi">
+  🤖<span class="notif" id="chat-notif"></span>
+</button>
+<div class="chat-window" id="chat-window" role="dialog" aria-label="Asistent Medi">
+  <div class="chat-win-header">
+    <div class="chat-avatar">🤖</div>
+    <div><div class="chat-bot-name">Medi — Asistent Farmaceutic</div><div class="chat-bot-status">Online</div></div>
+    <button class="modal-close" style="margin-left:auto;color:rgba(255,255,255,.8)" onclick="toggleChat()" aria-label="Închide chat">×</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chat-input" placeholder="Scrie un mesaj..." onkeydown="if(event.key==='Enter')sendChat()" aria-label="Mesaj"/>
+    <button class="chat-send" onclick="sendChat()" aria-label="Trimite">➤</button>
+  </div>
+</div>
+
+<script>
+const API='';
+let token=localStorage.getItem('ms_token')||'';
+let role=localStorage.getItem('ms_role')||'';
+let username=localStorage.getItem('ms_user')||'';
+let currentPage='dashboard';
+let allMeds=[];
+let alertCount=0;
+let cart=[];
+let editingMedId=null;
+
+async function api(path,method='GET',body=null){
+  const opts={method,headers:{'Authorization':'Bearer '+token}};
+  if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  const res=await fetch(API+path,opts);
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'Eroare server');
+  return data;
+}
+
+function toast(msg,type='success'){
+  const t=document.createElement('div');
+  t.className='toast '+(type==='error'?'error':type==='warn'?'warn':'');
+  t.innerHTML=(type==='error'?'❌':type==='warn'?'⚠️':'✅')+' '+msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>{t.style.animation='fadeOut .3s ease forwards';setTimeout(()=>t.remove(),300);},3500);
+}
+
+document.getElementById('login-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const user=document.getElementById('inp-user').value.trim();
+  const pass=document.getElementById('inp-pass').value;
+  try{
+    const d=await api('/api/login','POST',{username:user,password:pass||null});
+    token=d.token;role=d.role;username=d.username;
+    localStorage.setItem('ms_token',token);localStorage.setItem('ms_role',role);localStorage.setItem('ms_user',username);
+    initApp();
+  }catch(err){toast(err.message,'error');}
+});
+
+function quickLogin(u){
+  document.getElementById('inp-user').value=u;
+  document.getElementById('inp-pass').value=u==='admin'?'ASEMTI241':'';
+  document.getElementById('login-form').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));
+}
+
+async function logout(){
+  try{await api('/api/logout','POST');}catch{}
+  localStorage.clear();token='';role='';username='';cart=[];
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-page').style.display='flex';
+}
+
+async function initApp(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('user-name-display').textContent=username;
+  document.getElementById('user-role-display').textContent=role==='admin'?'Administrator':'Vizitator';
+  const av=document.getElementById('user-avatar');
+  av.className='user-avatar '+role;av.textContent=role==='admin'?'A':'G';
+  buildNav();
+  setInterval(updateDate,1000);updateDate();
+  if(role==='admin')document.getElementById('alert-btn').style.display='flex';
+  if(role==='guest')document.getElementById('cart-btn').style.display='flex';
+  document.getElementById('chat-fab').style.display='flex';
+  addBotMessage('Bun venit la MediStock Pro! 👋 Sunt Medi, asistentul tău farmaceutic. Scrie **ajutor** pentru opțiuni.');
+  await navigate('dashboard');
+}
+
+function buildNav(){
+  const nav=document.getElementById('sidebar-nav');nav.innerHTML='';
+  const items=[
+    {id:'dashboard',icon:'📊',label:'Dashboard',roles:['admin','guest']},
+    {id:'medicamente',icon:'💊',label:'Medicamente',roles:['admin','guest']},
+    {id:'comenzi',icon:'📦',label:'Comenzi',roles:['admin','guest']},
+    {id:'miscari',icon:'🔄',label:'Mișcări Stoc',roles:['admin']},
+    {id:'alerte',icon:'🔔',label:'Alerte',roles:['admin'],badge:true},
+    {id:'rapoarte',icon:'📈',label:'Rapoarte',roles:['admin']},
+    {id:'locatie',icon:'📍',label:'Locație',roles:['admin','guest']},
+  ];
+  let sec='';
+  items.forEach(it=>{
+    if(!it.roles.includes(role))return;
+    if(it.id==='miscari'&&sec!=='adm'){nav.innerHTML+='<div class="nav-section-label">Administrare</div>';sec='adm';}
+    if(it.id==='locatie'&&sec!=='inf'){nav.innerHTML+='<div class="nav-section-label">Informații</div>';sec='inf';}
+    const badge=it.badge?`<span class="nav-badge warn" id="nav-alert-badge" style="display:none">0</span>`:'';
+    const div=document.createElement('div');
+    div.className='nav-item';div.dataset.page=it.id;
+    div.innerHTML=`<span class="nav-icon">${it.icon}</span><span>${it.label}</span>${badge}`;
+    div.addEventListener('click',()=>{navigate(it.id);closeSidebar();});
+    nav.appendChild(div);
+  });
+}
+
+function updateDate(){
+  const n=new Date();
+  document.getElementById('topbar-date').textContent=n.toLocaleDateString('ro-RO',{weekday:'short',day:'numeric',month:'short'})+' '+n.toLocaleTimeString('ro-RO',{hour:'2-digit',minute:'2-digit'});
+}
+
+const pageTitles={
+  dashboard:['Dashboard','Rezumat activitate farmacii'],
+  medicamente:['Catalog Medicamente','Gestionare stoc și prețuri'],
+  comenzi:['Comenzi','Gestionare și aprobare comenzi'],
+  miscari:['Mișcări Stoc','Intrări și ieșiri inventar'],
+  alerte:['Alerte & Notificări','Medicamente expirate sau stoc redus'],
+  rapoarte:['Rapoarte & Statistici','Analize lunare'],
+  locatie:['Locație Farmacie','Cum ne găsești'],
+};
+
+async function navigate(page){
+  if(!page)page='dashboard';
+  currentPage=page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+page);
+  if(pg)pg.classList.add('active');
+  const ni=document.querySelector(`.nav-item[data-page="${page}"]`);
+  if(ni)ni.classList.add('active');
+  const [title,sub]=pageTitles[page]||['MediStock',''];
+  document.getElementById('topbar-title').textContent=title;
+  document.getElementById('topbar-subtitle').textContent=sub;
+  const loaders={dashboard:loadDashboard,medicamente:loadMedicamente,comenzi:loadComenzi,miscari:loadMiscari,alerte:loadAlerte,rapoarte:loadRapoarte,locatie:loadLocatie};
+  if(loaders[page])await loaders[page]();
+}
+
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const o=document.getElementById('sidebar-overlay');
+  s.classList.toggle('open');
+  o.style.display=s.classList.contains('open')?'block':'none';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').style.display='none';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
+
+// DASHBOARD
+async function loadDashboard(){
+  const el=document.getElementById('page-dashboard');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{
+    const d=await api('/api/dashboard');
+    alertCount=(d.expira||0)+(d.expirat||0)+(d.stocRedus||0)+(d.epuizat||0);
+    const badge=document.getElementById('nav-alert-badge');
+    const dot=document.getElementById('alert-dot');
+    const cnt=document.getElementById('alert-count-top');
+    if(badge){badge.textContent=alertCount;badge.style.display=alertCount>0?'flex':'none';}
+    if(dot)dot.style.display=alertCount>0?'block':'none';
+    if(cnt)cnt.textContent=alertCount>0?' '+alertCount:'';
+
+    const perCatEntries=Object.entries(d.perCat||{});
+    const maxVal=Math.max(...perCatEntries.map(e=>e[1]),1);
+    const colors=['#0891B2','#059669','#7C3AED','#D97706','#DC2626','#0E7490','#065F46'];
+    const bars=perCatEntries.map((e,i)=>`
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;position:relative;padding-bottom:22px">
+        <div style="font-size:.62rem;color:var(--text-muted);font-weight:700;margin-bottom:3px">${e[1]}</div>
+        <div style="flex:1;width:80%;border-radius:6px 6px 0 0;background:${colors[i%colors.length]};min-height:4px;height:${Math.round((e[1]/maxVal)*100)}%;opacity:.85;transition:height .8s ease"></div>
+        <div style="position:absolute;bottom:0;font-size:.6rem;color:var(--text-dim);text-align:center;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e[0].split(' ')[0]}</div>
+      </div>`).join('');
+
+    const admExtra=role==='admin'?`
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 Stoc pe Categorii</div></div>
+        <div class="card-body"><div style="display:flex;align-items:flex-end;gap:6px;height:160px;padding-bottom:24px">${bars||'<span style="color:var(--text-dim);font-size:.85rem">Fără date</span>'}</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📦 Statistici Comenzi</div></div>
+        <div class="card-body">
+          ${[['🕐 În Așteptare',d.comenziStats?.in_asteptare||0,'var(--info)'],['✅ Aprobate',d.comenziStats?.aprobate||0,'var(--cta)'],['❌ Respinse',d.comenziStats?.respinse||0,'var(--danger)'],['📋 Total',d.comenziStats?.total||0,'var(--text-muted)']].map(([l,v,c])=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-light)">
+            <span style="font-size:.875rem;color:var(--text)">${l}</span>
+            <span style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;color:${c}">${v}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`:`
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header"><div class="card-title">📦 Comenzile Mele</div></div>
+      <div class="card-body">
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px;text-align:center;padding:18px;background:var(--info-light);border:1px solid var(--info-border);border-radius:10px">
+            <div style="font-size:2rem;font-weight:800;color:var(--info);font-family:var(--font-head)">${d.comenziStats?.in_asteptare||0}</div>
+            <div style="font-size:.75rem;color:var(--text-muted);font-weight:600">În așteptare</div>
+          </div>
+          <div style="flex:1;min-width:120px;text-align:center;padding:18px;background:var(--success-light);border:1px solid var(--success-border);border-radius:10px">
+            <div style="font-size:2rem;font-weight:800;color:var(--cta);font-family:var(--font-head)">${d.comenziStats?.aprobate||0}</div>
+            <div style="font-size:.75rem;color:var(--text-muted);font-weight:600">Aprobate</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+    el.innerHTML=`
+      <div class="page-header">
+        <div><div class="page-title">👋 Bun venit, ${username}!</div><div class="page-subtitle">${new Date().toLocaleDateString('ro-RO',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div>
+      </div>
+      <div class="trust-bar">
+        <div class="trust-bar-title">🏥 Farmacia MediStock Pro · lângă ASEM Moldova</div>
+        <div class="trust-items">
+          <span class="trust-item">✅ WCAG AAA</span>
+          <span class="trust-item">🔒 Securizat</span>
+          <span class="trust-item">💊 ${d.total} produse</span>
+          <span class="trust-item">📍 Chișinău</span>
+        </div>
+      </div>
+      <div class="stats-grid">
+        ${sc('💊','Medicamente',d.total,'teal')}
+        ${sc('⚠️','Expiră Curând',d.expira,'yellow')}
+        ${sc('❌','Expirate',d.expirat,'red')}
+        ${sc('📉','Stoc Redus',d.stocRedus,'yellow')}
+        ${sc('💰','Valoare Stoc',(d.valoare||0).toLocaleString('ro-RO')+' MDL','green')}
+        ${sc('🚫','Epuizate',d.epuizat,'red')}
+      </div>
+      ${admExtra}
+      ${alertCount>0&&role==='admin'?`
+      <div class="card" style="border-color:var(--warning-border);margin-top:4px">
+        <div class="card-header" style="background:var(--warning-light)">
+          <div class="card-title" style="color:var(--warning)">⚠️ Atenție Necesară</div>
+          <button class="btn btn-warning btn-sm" onclick="navigate('alerte')">Vezi Alerte →</button>
+        </div>
+        <div class="card-body"><p style="font-size:.875rem;color:var(--text-muted)">${alertCount} probleme: <strong>${d.expirat}</strong> expirate, <strong>${d.expira}</strong> expiră curând, <strong>${d.stocRedus}</strong> stoc redus, <strong>${d.epuizat}</strong> epuizate.</p></div>
+      </div>`:''}`;
+  }catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+const sc=(icon,label,val,color)=>`<div class="stat-card"><div class="stat-icon ${color}">${icon}</div><div class="stat-info"><div class="stat-value">${val}</div><div class="stat-label">${label}</div></div></div>`;
+
+// MEDICAMENTE
+async function loadMedicamente(){
+  const el=document.getElementById('page-medicamente');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{allMeds=await api('/api/medicamente');renderMedicamente(allMeds);}
+  catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+
+function renderMedicamente(meds){
+  const el=document.getElementById('page-medicamente');
+  const cats=[...new Set(meds.map(m=>m.categorie))].sort();
+  const sb=s=>{const map={ok:'badge-ok ✅ OK',expira:'badge-expira ⏳ Expiră',expirat:'badge-expirat ❌ Expirat',epuizat:'badge-epuizat 🚫 Epuizat',stoc_redus:'badge-stoc_redus ⚠️ Stoc Redus'};const p=(map[s]||'badge-ok ✅ OK').split(' ');return `<span class="badge ${p[0]}">${p.slice(1).join(' ')}</span>`;};
+  const addBtn=role==='admin'?`<button class="btn btn-primary" onclick="openAddMed()">➕ Adaugă</button>`:'';
+  const miscBtn=role==='admin'?`<button class="btn btn-secondary" onclick="openMiscare()">🔄 Mișcare</button>`:'';
+  el.innerHTML=`
+    <div class="page-header">
+      <div><div class="page-title">💊 Catalog Medicamente</div><div class="page-subtitle">${meds.length} produse în sistem</div></div>
+      <div class="page-actions">${miscBtn}${addBtn}</div>
+    </div>
+    <div class="search-bar">
+      <div class="search-input-wrap" style="flex:2"><input id="med-search" placeholder="Caută după nume, DCI, producător..." oninput="filterMeds()"/></div>
+      <select class="filter-select" id="med-cat-filter" onchange="filterMeds()">
+        <option value="">Toate categoriile</option>
+        ${cats.map(c=>`<option value="${c}">${c}</option>`).join('')}
+      </select>
+      <select class="filter-select" id="med-status-filter" onchange="filterMeds()">
+        <option value="">Toate statusurile</option>
+        <option value="ok">OK</option><option value="expira">Expiră</option>
+        <option value="expirat">Expirat</option><option value="stoc_redus">Stoc Redus</option><option value="epuizat">Epuizat</option>
+      </select>
+    </div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Medicament</th><th>Categorie</th><th>Stoc</th><th>Preț</th><th>Expiră</th><th>Status</th><th>Acțiuni</th></tr></thead>
+      <tbody id="meds-tbody">${meds.map(m=>medRow(m,sb)).join('')}</tbody>
+    </table></div></div>`;
+}
+
+function medRow(m,sb_fn){
+  const sb=sb_fn||((s)=>`<span class="badge badge-${s}">${s}</span>`);
+  const cartBtn=role==='guest'?`<button class="btn btn-sm btn-cta" onclick="addToCart(${m.id})" aria-label="Adaugă în coș">🛒</button>`:'';
+  const adminBtns=role==='admin'?`<button class="btn btn-sm btn-secondary" onclick="openEditMed(${m.id})" aria-label="Editează">✏️</button><button class="btn btn-sm btn-danger" onclick="deleteMed(${m.id})" aria-label="Șterge">🗑️</button>`:'';
+  return `<tr>
+    <td><div style="font-weight:600">${m.name}</div><div style="font-size:.72rem;color:var(--text-muted)">${m.dci||''} · ${m.producator||''}</div></td>
+    <td><span class="badge" style="background:var(--bg2);color:var(--text-med);border:1px solid var(--border-light)">${m.categorie}</span></td>
+    <td><span style="font-weight:700;color:${m.stoc<=m.stoc_minim?'var(--warning)':m.stoc===0?'var(--danger)':'var(--text)'}">${m.stoc}</span><span style="font-size:.71rem;color:var(--text-dim)"> / min ${m.stoc_minim}</span></td>
+    <td style="font-weight:700;color:var(--primary)">${m.pret.toFixed(2)} <small style="color:var(--text-dim)">MDL</small></td>
+    <td style="font-size:.8rem;color:var(--text-muted)">${m.data_expirare}</td>
+    <td>${sb(m.status)}</td>
+    <td><div style="display:flex;gap:5px">${cartBtn}${adminBtns}</div></td>
+  </tr>`;
+}
+
+function filterMeds(){
+  const q=(document.getElementById('med-search')||{}).value?.toLowerCase()||'';
+  const cat=(document.getElementById('med-cat-filter')||{}).value||'';
+  const st=(document.getElementById('med-status-filter')||{}).value||'';
+  const filtered=allMeds.filter(m=>(!q||(m.name+m.dci+m.producator+m.lot).toLowerCase().includes(q))&&(!cat||m.categorie===cat)&&(!st||m.status===st));
+  const sb=s=>{const map={ok:'badge-ok ✅ OK',expira:'badge-expira ⏳ Expiră',expirat:'badge-expirat ❌ Expirat',epuizat:'badge-epuizat 🚫 Epuizat',stoc_redus:'badge-stoc_redus ⚠️ Stoc Redus'};const p=(map[s]||'badge-ok ✅ OK').split(' ');return `<span class="badge ${p[0]}">${p.slice(1).join(' ')}</span>`;};
+  const tbody=document.getElementById('meds-tbody');
+  if(tbody)tbody.innerHTML=filtered.length?filtered.map(m=>medRow(m,sb)).join(''):`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🔍</div><p>Niciun medicament găsit</p></div></td></tr>`;
+}
+
+function openAddMed(){editingMedId=null;document.getElementById('modal-med-title').textContent='Adaugă Medicament';document.getElementById('form-med').reset();openModal('modal-med');}
+function openEditMed(id){const m=allMeds.find(x=>x.id===id);if(!m)return;editingMedId=id;document.getElementById('modal-med-title').textContent='Editează Medicament';const f=document.getElementById('form-med');Object.entries(m).forEach(([k,v])=>{const el=f.elements[k];if(el)el.value=v;});openModal('modal-med');}
+async function saveMed(){const f=document.getElementById('form-med');if(!f.checkValidity()){f.reportValidity();return;}const body=Object.fromEntries(new FormData(f).entries());try{editingMedId?await api('/api/medicamente/'+editingMedId,'PUT',body):await api('/api/medicamente','POST',body);toast(editingMedId?'Medicament actualizat!':'Medicament adăugat!');closeModal('modal-med');await loadMedicamente();}catch(e){toast(e.message,'error');}}
+async function deleteMed(id){if(!confirm('Ești sigur că vrei să ștergi?'))return;try{await api('/api/medicamente/'+id,'DELETE');toast('Medicament șters.');await loadMedicamente();}catch(e){toast(e.message,'error');}}
+
+async function openMiscare(){
+  try{
+    const meds=allMeds.length?allMeds:await api('/api/medicamente');
+    const sel=document.getElementById('select-med-miscare');
+    sel.innerHTML=meds.map(m=>`<option value="${m.id}">${m.name} (stoc: ${m.stoc})</option>`).join('');
+    document.getElementById('form-miscare').reset();
+    if(meds.length)sel.value=meds[0].id;
+    openModal('modal-miscare');
+  }catch(e){toast(e.message,'error');}
+}
+async function saveMiscare(){const f=document.getElementById('form-miscare');if(!f.checkValidity()){f.reportValidity();return;}const body=Object.fromEntries(new FormData(f).entries());try{await api('/api/miscari','POST',body);toast('Mișcare înregistrată!');closeModal('modal-miscare');await loadMedicamente();if(currentPage==='miscari')await loadMiscari();}catch(e){toast(e.message,'error');}}
+
+// CART
+function addToCart(id){const m=allMeds.find(x=>x.id===id);if(!m)return;if(m.stoc===0){toast('Medicament epuizat!','error');return;}const ex=cart.find(c=>c.id===id);if(ex){if(ex.qty>=m.stoc){toast('Stoc insuficient!','warn');return;}ex.qty++;}else cart.push({id,name:m.name,pret:m.pret,qty:1});renderCart();document.getElementById('cart-dot').style.display='block';toast('Adăugat în coș 🛒');}
+function removeFromCart(id){cart=cart.filter(c=>c.id!==id);renderCart();}
+function changeQty(id,delta){const it=cart.find(c=>c.id===id);if(!it)return;it.qty+=delta;if(it.qty<=0)removeFromCart(id);else renderCart();}
+function renderCart(){
+  document.getElementById('cart-count').textContent=cart.reduce((s,c)=>s+c.qty,0);
+  const list=document.getElementById('cart-items-list');const footer=document.getElementById('cart-footer');
+  if(!cart.length){list.innerHTML=`<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Coșul este gol</p></div>`;footer.innerHTML='';document.getElementById('cart-dot').style.display='none';return;}
+  list.innerHTML=cart.map(it=>`<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">${it.name}</div><div class="cart-item-price">${it.pret.toFixed(2)} MDL/buc</div></div><div class="cart-item-qty"><button class="qty-btn" onclick="changeQty(${it.id},-1)">−</button><span class="qty-val">${it.qty}</span><button class="qty-btn" onclick="changeQty(${it.id},1)">+</button></div><button class="btn btn-sm btn-danger btn-icon" onclick="removeFromCart(${it.id})">×</button></div>`).join('');
+  const total=cart.reduce((s,c)=>s+c.pret*c.qty,0);
+  footer.innerHTML=`<div class="cart-total"><span class="cart-total-label">Total comandă</span><span class="cart-total-val">${total.toFixed(2)} MDL</span></div><button class="btn btn-cta" style="width:100%" onclick="openCheckout()">🚀 Finalizează Comanda</button><button class="btn btn-secondary" style="width:100%;margin-top:8px" onclick="cart=[];renderCart()">🗑️ Golește</button>`;
+}
+function toggleCart(){document.getElementById('cart-sidebar').classList.toggle('open');renderCart();}
+function openCheckout(){
+  if(!cart.length){toast('Coșul este gol!','warn');return;}
+  const items=cart.map(c=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.83rem;border-bottom:1px solid var(--border-light)"><span>💊 ${c.name} ×${c.qty}</span><span style="font-weight:700">${(c.pret*c.qty).toFixed(2)} MDL</span></div>`).join('');
+  const total=cart.reduce((s,c)=>s+c.pret*c.qty,0);
+  document.getElementById('modal-comanda-items').innerHTML=items+`<div style="display:flex;justify-content:space-between;padding:8px 0 0;font-weight:800;color:var(--primary)"><span>Total</span><span>${total.toFixed(2)} MDL</span></div>`;
+  document.getElementById('form-comanda').reset();openModal('modal-comanda');
+}
+async function placeOrder(){
+  const f=document.getElementById('form-comanda');if(!f.checkValidity()){f.reportValidity();return;}
+  const body={...Object.fromEntries(new FormData(f).entries()),items:cart.map(c=>({medicament_id:c.id,cantitate:c.qty}))};
+  try{await api('/api/comenzi','POST',body);toast('Comanda plasată cu succes! 🎉');cart=[];renderCart();closeModal('modal-comanda');document.getElementById('cart-sidebar').classList.remove('open');navigate('comenzi');}
+  catch(e){toast(e.message,'error');}
+}
+
+// COMENZI
+async function loadComenzi(){
+  const el=document.getElementById('page-comenzi');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{
+    const comenzi=await api('/api/comenzi');
+    const statusOpts=role==='admin'?`<option value="in_asteptare">🕐 În Așteptare</option><option value="aprobata">✅ Aprobată</option><option value="respinsa">❌ Respinsă</option><option value="livrata">📦 Livrată</option>`:'';
+    const rows=comenzi.length?comenzi.map(c=>{
+      const items=c.items.map(it=>`${it.medicament_name} ×${it.cantitate}`).join(', ');
+      const adminAct=role==='admin'?`<select class="filter-select" style="font-size:.75rem;padding:5px 10px" onchange="updateOrderStatus(${c.id},this.value)" data-cid="${c.id}">${statusOpts}</select><button class="btn btn-sm btn-danger btn-icon" onclick="deleteOrder(${c.id})">🗑️</button>`:`<span class="badge badge-${c.status}">${{in_asteptare:'🕐 Așteptare',aprobata:'✅ Aprobată',respinsa:'❌ Respinsă',livrata:'📦 Livrată'}[c.status]||c.status}</span>`;
+      return `<tr><td style="font-weight:800;color:var(--primary)">#${c.id}</td><td><div style="font-weight:600">${c.nume}</div><div style="font-size:.72rem;color:var(--text-muted)">${c.telefon}</div></td><td style="font-size:.8rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${items}</td><td style="font-weight:700;color:var(--primary)">${c.total.toFixed(2)} MDL</td><td style="font-size:.78rem;color:var(--text-muted)">${new Date(c.data).toLocaleDateString('ro-RO')}</td><td><div style="display:flex;gap:5px;align-items:center">${adminAct}</div></td></tr>`;
+    }).join(''):`<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📦</div><p>Nicio comandă</p></div></td></tr>`;
+
+    el.innerHTML=`
+      <div class="page-header">
+        <div><div class="page-title">📦 Comenzi</div><div class="page-subtitle">${comenzi.length} comenzi</div></div>
+        ${role==='guest'?`<div class="page-actions"><button class="btn btn-cta" onclick="navigate('medicamente');setTimeout(()=>toggleCart(),300)">🛒 Comandă Acum</button></div>`:''}
+      </div>
+      <div class="card"><div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Client</th><th>Produse</th><th>Total</th><th>Data</th><th>Status / Acțiune</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div></div>`;
+    // setează valorile selectului după ce DOM-ul a fost actualizat
+    requestAnimationFrame(()=>{
+      if(role==='admin')comenzi.forEach(c=>{const s=el.querySelector(`select[data-cid="${c.id}"]`);if(s)s.value=c.status;});
+    });
+  }catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+async function updateOrderStatus(id,status){try{await api('/api/comenzi/'+id,'PUT',{status});toast('Status actualizat!');await loadComenzi();}catch(e){toast(e.message,'error');await loadComenzi();}}
+async function deleteOrder(id){if(!confirm('Ștergi comanda #'+id+'?'))return;try{await api('/api/comenzi/'+id,'DELETE');toast('Comandă ștearsă.');await loadComenzi();}catch(e){toast(e.message,'error');}}
+
+// MISCARI
+async function loadMiscari(){
+  const el=document.getElementById('page-miscari');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{
+    const miscari=await api('/api/miscari');
+    const rows=miscari.length?miscari.map(m=>`<tr><td style="font-weight:700;color:var(--primary)">#${m.id}</td><td><span class="badge ${m.tip==='intrare'?'badge-aprobata':'badge-respinsa'}">${m.tip==='intrare'?'📥 Intrare':'📤 Ieșire'}</span></td><td style="font-weight:600">${m.medicament_name}</td><td style="font-weight:700;color:${m.tip==='intrare'?'var(--cta)':'var(--danger)'}">${m.tip==='intrare'?'+':'−'}${m.cantitate}</td><td style="font-size:.78rem;color:var(--text-muted)">${m.user}</td><td style="font-size:.78rem;color:var(--text-muted)">${new Date(m.data).toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit',year:'numeric'})}</td><td style="font-size:.8rem;color:var(--text-muted)">${m.note||'—'}</td></tr>`).join(''):`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🔄</div><p>Nicio mișcare</p></div></td></tr>`;
+    el.innerHTML=`<div class="page-header"><div><div class="page-title">🔄 Mișcări Stoc</div><div class="page-subtitle">${miscari.length} înregistrări</div></div><div class="page-actions"><button class="btn btn-primary" onclick="openMiscare()">➕ Mișcare Nouă</button></div></div><div class="card"><div class="table-wrap"><table><thead><tr><th>#</th><th>Tip</th><th>Medicament</th><th>Cantitate</th><th>User</th><th>Data</th><th>Notă</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+
+// ALERTE
+async function loadAlerte(){
+  const el=document.getElementById('page-alerte');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{
+    const d=await api('/api/alerte');
+    const expRows=d.expira.map(m=>`<div class="alert-item"><div class="alert-dot2 ${m.zile_ramase<0?'red':'yellow'}"></div><div class="alert-info"><div class="alert-name">${m.name}</div><div class="alert-detail">${m.zile_ramase<0?`Expirat acum ${Math.abs(m.zile_ramase)} zile`:`Expiră în ${m.zile_ramase} zile · ${m.data_expirare}`}</div></div><span class="badge ${m.zile_ramase<0?'badge-expirat':'badge-expira'}">${m.lot}</span></div>`).join('')||'<div class="alert-item"><span style="font-size:.875rem;color:var(--text-muted)">✅ Nicio problemă de expirare</span></div>';
+    const stocRows=d.stocRedus.map(m=>`<div class="alert-item"><div class="alert-dot2 ${m.stoc===0?'red':'yellow'}"></div><div class="alert-info"><div class="alert-name">${m.name}</div><div class="alert-detail">Stoc: ${m.stoc} buc · Minim: ${m.stoc_minim} buc</div></div><span class="badge ${m.stoc===0?'badge-epuizat':'badge-stoc_redus'}">${m.stoc===0?'Epuizat':'Redus'}</span></div>`).join('')||'<div class="alert-item"><span style="font-size:.875rem;color:var(--text-muted)">✅ Stocuri OK</span></div>';
+    el.innerHTML=`<div class="page-header"><div><div class="page-title">🔔 Alerte & Notificări</div></div></div><div class="two-col"><div class="card"><div class="card-header"><div class="card-title">⏰ Expirare Medicamente</div><span class="badge badge-expira">${d.expira.length}</span></div>${expRows}</div><div class="card"><div class="card-header"><div class="card-title">📉 Stoc Redus / Epuizat</div><span class="badge badge-stoc_redus">${d.stocRedus.length}</span></div>${stocRows}</div></div>`;
+  }catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+
+// RAPOARTE
+async function loadRapoarte(){
+  const el=document.getElementById('page-rapoarte');
+  el.innerHTML='<div style="padding:40px;color:var(--text-muted);text-align:center">⏳ Se încarcă...</div>';
+  try{
+    const d=await api('/api/rapoarte');
+    const maxTop=Math.max(...(d.topVanzari||[]).map(x=>x.v),1);
+    const topBars=(d.topVanzari||[]).map((x,i)=>`<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><div style="width:18px;text-align:right;font-size:.74rem;color:var(--text-dim)">${i+1}</div><div style="font-size:.82rem;width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)">${x.name}</div><div style="flex:1;background:var(--bg2);border-radius:4px;height:20px;overflow:hidden;border:1px solid var(--border-light)"><div style="height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));width:${Math.round(x.v/maxTop*100)}%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:.7rem;font-weight:700;color:#fff">${x.v}</div></div></div>`).join('')||'<p style="color:var(--text-dim);font-size:.875rem">Fără date luna aceasta</p>';
+    const colors=['#0891B2','#059669','#7C3AED','#D97706','#DC2626'];
+    const maxCat=Math.max(...(d.distCat||[]).map(x=>x.v),1);
+    const catBars=(d.distCat||[]).map((x,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;position:relative;padding-bottom:22px"><div style="font-size:.6rem;color:var(--text-muted);font-weight:700;margin-bottom:3px">${x.v}</div><div style="flex:1;width:80%;border-radius:5px 5px 0 0;background:${colors[i%colors.length]};min-height:4px;height:${Math.round((x.v/maxCat)*100)}%;opacity:.85"></div><div style="position:absolute;bottom:0;font-size:.58rem;color:var(--text-dim);text-align:center;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.name.split(' ')[0]}</div></div>`).join('');
+    el.innerHTML=`<div class="page-header"><div><div class="page-title">📈 Rapoarte & Statistici</div><div class="page-subtitle">${new Date().toLocaleDateString('ro-RO',{month:'long',year:'numeric'})}</div></div></div><div class="stats-grid" style="margin-bottom:20px">${sc('📥','Intrări Luna Asta',d.intrari,'teal')}${sc('📤','Ieșiri Luna Asta',d.iesiri,'green')}</div><div class="two-col"><div class="card"><div class="card-header"><div class="card-title">🏆 Top Vânzări</div></div><div class="card-body">${topBars}</div></div><div class="card"><div class="card-header"><div class="card-title">📊 Stoc pe Categorii</div></div><div class="card-body"><div style="display:flex;align-items:flex-end;gap:6px;height:160px;padding-bottom:24px">${catBars}</div></div></div></div>`;
+  }catch(e){el.innerHTML=`<div class="empty-state"><p>${e.message}</p></div>`;}
+}
+
+// LOCATIE
+function loadLocatie(){
+  document.getElementById('page-locatie').innerHTML=`
+    <div class="page-header"><div><div class="page-title">📍 Locație Farmacie</div><div class="page-subtitle">Lângă ASEM Moldova, Chișinău</div></div></div>
+    <div class="trust-bar" style="margin-bottom:20px">
+      <div class="trust-bar-title">🏥 Farmacia MediStock Pro</div>
+      <div class="trust-items"><span class="trust-item">⏰ L-V: 08:00-20:00</span><span class="trust-item">📅 Sâmbătă: 09:00-17:00</span><span class="trust-item">🔴 Duminică: Închis</span></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title">ℹ️ Contact & Program</div></div>
+        <div class="card-body">
+          ${[['📍','Adresă','Str. Mitropolit Gavriil Bănulescu-Bodoni (lângă ASEM Moldova), Chișinău'],['📞','Telefon','+373 22 XXX XXX'],['📧','Email','contact@medistock.md'],['🕐','Luni–Vineri','08:00 — 20:00'],['🕐','Sâmbătă','09:00 — 17:00'],['🔴','Duminică','Închis']].map(([i,l,v])=>`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-light)"><span style="font-size:18px;width:24px;text-align:center;flex-shrink:0">${i}</span><div><div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:2px">${l}</div><div style="font-size:.875rem;color:var(--text)">${v}</div></div></div>`).join('')}
+          <div style="margin-top:14px;padding:12px;background:var(--info-light);border:1px solid var(--info-border);border-radius:8px;font-size:.8rem;color:var(--info)">🏫 Farmacia se află în apropierea <strong>Academiei de Studii Economice din Moldova (ASEM)</strong>.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">🗺️ Hartă</div></div>
+        <div class="card-body" style="padding:0">
+          <iframe class="map-frame" src="https://www.openstreetmap.org/export/embed.html?bbox=28.830%2C47.018%2C28.850%2C47.028&layer=mapnik&marker=47.023%2C28.840" allowfullscreen loading="lazy" title="Hartă locație farmacie"></iframe>
+          <div style="padding:10px 16px;font-size:.75rem;color:var(--text-muted)">📌 ASEM Moldova · Chișinău · Republica Moldova</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">🚌 Cum Ajungi</div></div>
+      <div class="card-body"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+        ${[['🚌','Troleibuz','Liniile 1, 4, 22 · Stația ASEM'],['🚗','Mașină','Parcare disponibilă pe str. adiacentă'],['🚶','Pe jos','5 min din Parcul Catedralei'],['🚕','Taxi','Uber / Bolt disponibil']].map(([i,t,d])=>`<div style="background:var(--bg2);border:1px solid var(--border-light);border-radius:8px;padding:14px"><div style="font-size:24px;margin-bottom:8px">${i}</div><div style="font-weight:700;font-size:.875rem;color:var(--text);margin-bottom:4px">${t}</div><div style="font-size:.78rem;color:var(--text-muted)">${d}</div></div>`).join('')}
+      </div></div>
+    </div>`;
+}
+
+// CHATBOT
+function toggleChat(){const w=document.getElementById('chat-window');w.classList.toggle('open');if(w.classList.contains('open')){document.getElementById('chat-notif').style.display='none';document.getElementById('chat-input').focus();}}
+function addBotMessage(msg){const el=document.getElementById('chat-messages');if(!el)return;const div=document.createElement('div');div.className='chat-msg bot';div.innerHTML=msg.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');el.appendChild(div);el.scrollTop=el.scrollHeight;if(!document.getElementById('chat-window').classList.contains('open'))document.getElementById('chat-notif').style.display='block';}
+function addUserMessage(msg){const el=document.getElementById('chat-messages');if(!el)return;const div=document.createElement('div');div.className='chat-msg user';div.textContent=msg;el.appendChild(div);el.scrollTop=el.scrollHeight;}
+async function sendChat(){const inp=document.getElementById('chat-input');const msg=inp.value.trim();if(!msg)return;inp.value='';addUserMessage(msg);try{const d=await api('/api/chat','POST',{message:msg});setTimeout(()=>addBotMessage(d.message),350);}catch{addBotMessage('Îmi pare rău, a apărut o eroare. Încearcă din nou.');}}
+
+// BOOT
+(async()=>{
+  if(token){
+    try{const me=await api('/api/me');if(me.authenticated){role=me.role;username=me.username;await initApp();}else localStorage.clear();}
+    catch{localStorage.clear();}
+  }
+})();
+</script>
+</body>
+</html>
